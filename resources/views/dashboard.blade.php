@@ -79,7 +79,7 @@ font-size: 13px;
 <div class="row">
 <div class="col-lg-10 col-sm-10 col-12 offset-lg-1 offset-sm-1">
 <nav class="navbar navbar-expand-lg bg-info rounded">
-<a class="navbar-brand text-light" href="#">Logo</a>
+<a class="navbar-brand text-light" href="#">{{auth()->user()->name}}</a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 <span class="navbar-toggler-icon"></span>
 </button>
@@ -99,7 +99,7 @@ font-size: 13px;
 <li class="head text-light bg-dark">
 <div class="row">
 <div class="col-lg-12 col-sm-12 col-12">
-<span>Notifications ( {{auth()->user()->unreadNotifications()->count()}} )</span>
+<span>Notifications ( {{auth()->user()->unreadNotifications()->count()}} )</span>  <!-- this line to get number of notifications not read it -->
 <a href="" class="float-right text-light">Mark all as read</a>
 </div>
 </li>
@@ -112,7 +112,7 @@ font-size: 13px;
         </div>
         <div class="col-lg-8 col-sm-8 col-8">
         <strong class="text-info">{{$notification->data["user_name"]}}</strong>
-        <a href="#" class="title">{{$notification->data["post_title"]}}</a>
+        <a href="{{route('posts.show', $notification->data['post_id'])}}" class="title">{{$notification->data["post_title"]}}</a>
         <small class="text-warning">{{$notification->created_at}}</small>
         </div>
         </div>

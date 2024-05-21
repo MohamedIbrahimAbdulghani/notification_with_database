@@ -6,6 +6,7 @@ use App\Models\post;
 use App\Models\User;
 use App\Notifications\CreatePost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class PostController extends Controller
@@ -42,9 +43,9 @@ class PostController extends Controller
             "title"=>$request->title,
             "body"=>$request->body
         ]);
-        $user = User::where("id", "!=", auth()->user()->id)->get();
-        $create_user = auth()->user()->name;
-        Notification::send($user, new CreatePost($post->id, $create_user, $post->title));
+        $user = User::where("id", "!=", auth()->user()->id)->get(); // this line to choose all users without current user
+        $create_user = auth()->user()->name; // this is line to get user name
+        Notification::send($user, new CreatePost($post->id, $create_user, $post->title)); // this is line to send notification from table (post) to another table (notifications)
         return redirect()->route("dashboard");
     }
 
@@ -54,9 +55,12 @@ class PostController extends Controller
      * @param  \App\Models\post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(post $post)
+    public function show($id)
     {
-        //
+        $post = post::findOrFail($id);
+        $getID = DB::table("notifications")->where("data->post_id", $id)->pluck("id"); //  data["post_id"] الخاص بالبوست نفسه عن طريق ال  id من خلال ال  notifications الخاص بجدول ال id انت هنا عايز تجيب ال
+        DB::table("notifications")->where("id", $getID)->update(["read_at"=>now()]); // now() وخليها بالوقت الحالي وده طبعا عن طريق داله اسمها  read_at اللي مبعوت غيرلي ال  id لو يساوي ال  notifications الخاص بال id انت هنا بتقوله لو ال
+        return redirect()->route("dashboard");
     }
 
     /**
