@@ -29,3 +29,4 @@ Route::middleware([
 });
 
 Route::resource("posts", PostController::class);
+Route::get("Notification/markAsRead", [PostController::class, "markAsRead"])->name("notification.read");
